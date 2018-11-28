@@ -1,0 +1,67 @@
+mport java.util.Scanner;
+import java.util.*;
+
+//Your submission should *ONLY* use the following class name
+public class Problem
+{
+   public static int max=0;
+    public static void main(String[] args)
+    {
+
+       Scanner stdin = new Scanner(System.in);
+       int N=stdin.nextInt();
+       ArrayList<Point> pList=new ArrayList<Point>();
+       
+       for(int i=0; i<N; i++)
+       {
+          pList.add(new Point(stdin.nextInt(), stdin.nextInt()));
+          stdin.nextLine();
+       }
+       findPath(new Point(0,0),pList, 0);
+       System.out.print(max);
+       stdin.close();
+    }
+    
+	//depth first upward diagonal path
+    public static void findPath(Point p, ArrayList<Point> list, int pLength)
+    {
+        if(max==list.size())
+        return;
+		
+        for(int i=0; i<list.size(); i++) 
+        if(list.get(i).compareTo(p)>0)
+            findPath(list.get(i),list, pLength+1);
+            
+        if(pLength>max)
+        max=pLength;
+    }
+}
+
+class Point implements Comparable<Point>
+{
+    private int x;
+    private int y;
+    public Point(int x, int y)
+    {
+        this.x=x; 
+        this.y=y;
+    }
+    public int getX()
+    {
+        return x;
+    }
+    public int getY()
+    {
+        return y;
+    }
+    @Override
+    public int compareTo(Point o)
+    {
+        if(x<o.getX() && y<o.getY())
+        return -1;
+        if(x>=o.getX() && y>o.getY() || x>o.getX() && y>=o.getY())
+        return 1;
+        return 0;
+        
+    }
+}

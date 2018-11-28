@@ -1,0 +1,78 @@
+
+import java.util.Scanner;
+import java.util.*;
+//Your submission should *ONLY* use the following class name
+
+public class Problem {
+	public static HashMap<String, Planet> map;
+	public static int temp = 0;
+	public static ArrayList<String> tempList;
+	public static ArrayList<String> maxList;
+	public static int max = 0;
+	public static HashSet<String> notVisited = new HashSet<String>();
+
+	public static void main(String[] args) {
+
+		Scanner stdin = new Scanner(System.in);
+		int K = stdin.nextInt();
+		stdin.nextLine();
+
+		map = new HashMap<String, Planet>();
+		for (int i = 0; i < K; i++) {
+			String[] line = stdin.nextLine().split(",");
+			map.put(line[4], new Planet(Integer.parseInt(line[0]), Integer.parseInt(line[1]), Integer.parseInt(line[2]),
+					Double.parseDouble(line[3]), line[4]));
+
+			notVisited.add(line[4]);
+		}
+
+		while (notVisited.size() != 0) {
+			tempList = new ArrayList<String>();
+			Iterator iter = notVisited.iterator();
+			temp = 0;
+			fill((String) iter.next());
+			if (temp > max) {
+				max = temp;
+				maxList = new ArrayList<String>(tempList);
+			}
+		}
+		Collections.sort(maxList);
+		for (int i = 0; i < maxList.size(); i++) {
+			System.out.print(maxList.get(i));
+			if (i != maxList.size() - 1)
+				System.out.print(",");
+		}
+		stdin.close();
+	}
+
+	//flood fill max island size
+	public static void fill(String cur) {
+		temp++;
+		tempList.add(cur);
+		notVisited.remove(cur);
+		for (String s : map.keySet()) {
+			if (!s.equals(cur) && notVisited.contains(s) && map.get(s).distance(map.get(cur)) <= map.get(cur).range)
+				fill(s);
+		}
+	}
+}
+
+class Planet {
+	public int x;
+	public int y;
+	public int z;
+	public double range;
+	public String name;
+
+	public Planet(int x, int y, int z, double range, String name) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.range = range;
+		this.name = name;
+	}
+
+	public double distance(Planet o) {
+		return Math.sqrt(Math.pow(o.x - x, 2) + Math.pow(o.y - y, 2) + Math.pow(o.z - z, 2));
+	}
+}

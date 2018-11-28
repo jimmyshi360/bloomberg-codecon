@@ -1,0 +1,48 @@
+import java.util.Scanner;
+import java.util.*;
+
+//Your submission should *ONLY* use the following class name
+public class Problem {
+
+	public static boolean[][] arr;
+	public static int R;
+	public static int C;
+
+	public static void main(String[] args) {
+
+		Scanner stdin = new Scanner(System.in);
+		R = stdin.nextInt();
+		C = stdin.nextInt();
+		stdin.nextLine();
+		arr = new boolean[R][C];
+		for (int i = 0; i < R; i++) {
+			char[] marks = stdin.next().toCharArray();
+			for (int j = 0; j < marks.length; j++) {
+				arr[i][j] = marks[j] == '_';
+			}
+		}
+		findPath(1, 0, "", new HashSet<String>());
+		stdin.close();
+	}
+	
+	//finding path from start to finish in 2D maze
+	public static void findPath(int r, int c, String path, HashSet<String> visited) {
+
+		if (r == R - 2 && c == C - 1) {
+			path += r + "," + c + "\n";
+			System.out.println(path);
+			return;
+		}
+		if (r < 0 || c < 0 || r >= R || c >= C || !arr[r][c] || visited.contains(r + "," + c))
+			return;
+
+		path += r + "," + c + "\n";
+		visited.add(r + "," + c);
+
+		//up down left right
+		findPath(r + 1, c, path, visited);
+		findPath(r - 1, c, path, visited);
+		findPath(r, c + 1, path, visited);
+		findPath(r, c - 1, path, visited);
+	}
+}
